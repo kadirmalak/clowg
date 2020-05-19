@@ -7,7 +7,7 @@ A Clojure library for generating Clojure wrappers around Java
 - Leiningen/Boot
 
 ```
-[clowg "0.1.0"]
+[clowg "0.1.1"]
 ```
 
 ## Usage
