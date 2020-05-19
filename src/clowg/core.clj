@@ -45,6 +45,7 @@
 (defn collect-info [^Method method]
   (let [parameter-types (get-parameter-types method)]
     {:name (.getName method)
+     :is-static? (is-static? method)
      :parameter-types parameter-types
      :arity (count parameter-types)}))
 
@@ -55,12 +56,11 @@
        (apply max)
        (< 1 ,,,)))
 
-(defn get-instance-methods [class]
+(defn get-methods [class]
   (->>
     class
     (.getDeclaredMethods)
     (filter is-public?)
-    (filter #(not (is-static? %)))
     (map collect-info)
     (group-by :name)
     (map (fn [[name versions]]
@@ -123,16 +123,29 @@
                (symbol (str "." (:name version))))]
     (list params (concat body body-params))))
 
+(defn make-static-function-body [class version]
+  (let [parameter-types (:parameter-types version)
+        params (make-params parameter-types)
+        body-params (make-body-params parameter-types)
+        body (list
+               (symbol (str (.getName class) "/" (:name version))))]
+    (list params (concat body body-params))))
+
+(defn handle-version [class inst version]
+  (if (:is-static? version)
+    (make-static-function-body class version)
+    (make-function-body class inst version)))
+
 (defn make-function [class inst method]
   (let [name (symbol (:name method))
-        body (map (partial make-function-body class inst)
+        body (map (partial handle-version class inst)
                   (:versions method))]
     (concat (list 'defn name) body)))
 
 (defn make-functions
   ([class] (make-functions class false))
   ([class inst]
-   (->> (get-instance-methods class)
+   (->> (get-methods class)
         (filter #(not (:needs-multi? %))) ; no support for multi-methods yet...
         (map (partial make-function class inst))
         )))
