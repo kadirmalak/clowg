@@ -1,4 +1,5 @@
-(ns clowg.core
+(ns ^{:author "Kadir Malak"}
+  clowg.core
   (:require [clojure.string :as str]
             [clojure.pprint :as pp])
   (:import (java.lang.reflect Modifier Method)))
