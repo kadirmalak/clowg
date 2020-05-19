@@ -186,6 +186,25 @@ Or if you want to refer to a specific instance all the time (omits *this*)
  "
 ```
 
+If you want the actual code generated, use *make-functions* instead of *get-code*
+
+```
+(require '[clowg.core :refer [make-functions]])
+
+(make-functions Integer)
+=>
+((defn shortValue ([^java.lang.Integer this] (.shortValue this)))
+ (defn doubleValue ([^java.lang.Integer this] (.doubleValue this)))
+ (defn longValue ([^java.lang.Integer this] (.longValue this)))
+ (defn byteValue ([^java.lang.Integer this] (.byteValue this)))
+ (defn toString ([^java.lang.Integer this] (.toString this)))
+ (defn floatValue ([^java.lang.Integer this] (.floatValue this)))
+ (defn intValue ([^java.lang.Integer this] (.intValue this)))
+ (defn hashCode ([^java.lang.Integer this] (.hashCode this)))
+ (defn equals ([^java.lang.Integer this ^java.lang.Object a] (.equals this a))))
+
+```
+
 ## TODO
 
 - Generate static methods

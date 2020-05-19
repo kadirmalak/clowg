@@ -128,11 +128,13 @@
                   (:versions method))]
     (concat (list 'defn name) body)))
 
-(defn make-functions [class inst]
-  (->> (get-instance-methods class)
-       (filter #(not (:needs-multi? %))) ; no support for multi-methods yet...
-       (map (partial make-function class inst))
-       ))
+(defn make-functions
+  ([class] (make-functions class false))
+  ([class inst]
+   (->> (get-instance-methods class)
+        (filter #(not (:needs-multi? %))) ; no support for multi-methods yet...
+        (map (partial make-function class inst))
+        )))
 
 (defn get-code
   ([class] (get-code class false))
