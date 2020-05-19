@@ -1,3 +1,5 @@
+[![Clojars Project](https://img.shields.io/clojars/v/clowg.svg)](https://clojars.org/clowg)
+
 # clowg
 
 A Clojure library for generating Clojure wrappers around Java
