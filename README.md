@@ -9,209 +9,244 @@ A Clojure library for generating Clojure wrappers around Java
 - Leiningen/Boot
 
 ```
-[clowg "0.1.2"]
+[clowg "0.1.3"]
 ```
 
 ## Usage
 
 ```
-(require '[clowg.core :refer [get-code]])
+(require '[clowg.core :refer [get-code-str]])
 ```
 
-Wrap String class
+Wrap Integer class
 
 ```
-(get-code String)
+(get-code-str Integer)
 =>
-"(defn
-  getChars
-  ([^java.lang.String this a b c d]
-   (.getChars this (int a) (int b) (char-array c) (int d))))
- (defn trim ([^java.lang.String this] (.trim this)))
+"(defn make-Integer-from-int ([a] (java.lang.Integer. (int a))))
  (defn
-  toLowerCase
-  ([^java.lang.String this] (.toLowerCase this))
-  ([^java.lang.String this ^java.util.Locale a] (.toLowerCase this a)))
+  make-Integer-from-String
+  ([^java.lang.String a] (java.lang.Integer. a)))
+ (defn compare ([a b] (java.lang.Integer/compare (int a) (int b))))
  (defn
-  replaceAll
-  ([^java.lang.String this ^java.lang.String a ^java.lang.String b]
-   (.replaceAll this a b)))
+  remainderUnsigned
+  ([a b] (java.lang.Integer/remainderUnsigned (int a) (int b))))
+ (defn shortValue ([^java.lang.Integer this] (.shortValue this)))
+ (defn min ([a b] (java.lang.Integer/min (int a) (int b))))
+ (defn toHexString ([a] (java.lang.Integer/toHexString (int a))))
  (defn
-  contains
-  ([^java.lang.String this ^java.lang.CharSequence a]
-   (.contains this a)))
+  divideUnsigned
+  ([a b] (java.lang.Integer/divideUnsigned (int a) (int b))))
+ (defn doubleValue ([^java.lang.Integer this] (.doubleValue this)))
+ (defn highestOneBit ([a] (java.lang.Integer/highestOneBit (int a))))
+ (defn longValue ([^java.lang.Integer this] (.longValue this)))
+ (defn sum ([a b] (java.lang.Integer/sum (int a) (int b))))
+ (defn reverse ([a] (java.lang.Integer/reverse (int a))))
+ (defn decode ([^java.lang.String a] (java.lang.Integer/decode a)))
+ (defn byteValue ([^java.lang.Integer this] (.byteValue this)))
+ (defn max ([a b] (java.lang.Integer/max (int a) (int b))))
  (defn
-  endsWith
-  ([^java.lang.String this ^java.lang.String a] (.endsWith this a)))
+  toString
+  ([^java.lang.Integer this] (.toString this))
+  ([a] (java.lang.Integer/toString (int a)))
+  ([a b] (java.lang.Integer/toString (int a) (int b))))
  (defn
-  replaceFirst
-  ([^java.lang.String this ^java.lang.String a ^java.lang.String b]
-   (.replaceFirst this a b)))
- (defn toString ([^java.lang.String this] (.toString this)))
+  rotateRight
+  ([a b] (java.lang.Integer/rotateRight (int a) (int b))))
  (defn
-  subSequence
-  ([^java.lang.String this a b] (.subSequence this (int a) (int b))))
+  compareUnsigned
+  ([a b] (java.lang.Integer/compareUnsigned (int a) (int b))))
+ (defn floatValue ([^java.lang.Integer this] (.floatValue this)))
+ (defn toOctalString ([a] (java.lang.Integer/toOctalString (int a))))
+ (defn reverseBytes ([a] (java.lang.Integer/reverseBytes (int a))))
+ (defn bitCount ([a] (java.lang.Integer/bitCount (int a))))
+ (defn rotateLeft ([a b] (java.lang.Integer/rotateLeft (int a) (int b))))
+ (defn intValue ([^java.lang.Integer this] (.intValue this)))
  (defn
-  substring
-  ([^java.lang.String this a] (.substring this (int a)))
-  ([^java.lang.String this a b] (.substring this (int a) (int b))))
+  hashCode
+  ([^java.lang.Integer this] (.hashCode this))
+  ([a] (java.lang.Integer/hashCode (int a))))
+ (defn toBinaryString ([a] (java.lang.Integer/toBinaryString (int a))))
  (defn
-  equalsIgnoreCase
-  ([^java.lang.String this ^java.lang.String a]
-   (.equalsIgnoreCase this a)))
- (defn toCharArray ([^java.lang.String this] (.toCharArray this)))
- (defn charAt ([^java.lang.String this a] (.charAt this (int a))))
- (defn
-  split
-  ([^java.lang.String this ^java.lang.String a] (.split this a))
-  ([^java.lang.String this ^java.lang.String a b]
-   (.split this a (int b))))
- (defn
-  toUpperCase
-  ([^java.lang.String this] (.toUpperCase this))
-  ([^java.lang.String this ^java.util.Locale a] (.toUpperCase this a)))
- (defn
-  concat
-  ([^java.lang.String this ^java.lang.String a] (.concat this a)))
- (defn
-  offsetByCodePoints
-  ([^java.lang.String this a b]
-   (.offsetByCodePoints this (int a) (int b))))
- (defn length ([^java.lang.String this] (.length this)))
- (defn
-  regionMatches
-  ([^java.lang.String this a ^java.lang.String b c d]
-   (.regionMatches this (int a) b (int c) (int d)))
-  ([^java.lang.String this a b ^java.lang.String c d e]
-   (.regionMatches this (boolean a) (int b) c (int d) (int e))))
- (defn
-  matches
-  ([^java.lang.String this ^java.lang.String a] (.matches this a)))
- (defn intern ([^java.lang.String this] (.intern this)))
- (defn
-  startsWith
-  ([^java.lang.String this ^java.lang.String a] (.startsWith this a))
-  ([^java.lang.String this ^java.lang.String a b]
-   (.startsWith this a (int b))))
- (defn hashCode ([^java.lang.String this] (.hashCode this)))
- (defn isEmpty ([^java.lang.String this] (.isEmpty this)))
- (defn
-  codePointCount
-  ([^java.lang.String this a b] (.codePointCount this (int a) (int b))))
- (defn
-  codePointBefore
-  ([^java.lang.String this a] (.codePointBefore this (int a))))
+  numberOfLeadingZeros
+  ([a] (java.lang.Integer/numberOfLeadingZeros (int a))))
+ (defn toUnsignedLong ([a] (java.lang.Integer/toUnsignedLong (int a))))
+ (defn lowestOneBit ([a] (java.lang.Integer/lowestOneBit (int a))))
  (defn
   equals
-  ([^java.lang.String this ^java.lang.Object a] (.equals this a)))
+  ([^java.lang.Integer this ^java.lang.Object a] (.equals this a)))
  (defn
-  compareToIgnoreCase
-  ([^java.lang.String this ^java.lang.String a]
-   (.compareToIgnoreCase this a)))
+  numberOfTrailingZeros
+  ([a] (java.lang.Integer/numberOfTrailingZeros (int a))))
  (defn
-  codePointAt
-  ([^java.lang.String this a] (.codePointAt this (int a))))
+  parseUnsignedInt
+  ([^java.lang.String a] (java.lang.Integer/parseUnsignedInt a))
+  ([^java.lang.String a b]
+   (java.lang.Integer/parseUnsignedInt a (int b))))
+ (defn signum ([a] (java.lang.Integer/signum (int a))))
+ (defn
+  toUnsignedString
+  ([a] (java.lang.Integer/toUnsignedString (int a)))
+  ([a b] (java.lang.Integer/toUnsignedString (int a) (int b))))
+ (defn
+  parseInt
+  ([^java.lang.String a] (java.lang.Integer/parseInt a))
+  ([^java.lang.String a b] (java.lang.Integer/parseInt a (int b))))
+ (def -MIN_VALUE java.lang.Integer/MIN_VALUE)
+ (def -MAX_VALUE java.lang.Integer/MAX_VALUE)
+ (def -TYPE java.lang.Integer/TYPE)
+ (def -SIZE java.lang.Integer/SIZE)
+ (def -BYTES java.lang.Integer/BYTES)
  "
 ```
 
 Or if you want to refer to a specific instance all the time (omits *this*)
 
 ```
-(get-code String 'the-string)
+(get-code-str Integer 'the-int)
 =>
-"(defn
-  getChars
-  ([a b c d]
-   (.getChars the-string (int a) (int b) (char-array c) (int d))))
- (defn trim ([] (.trim the-string)))
+"(defn make-Integer-from-int ([a] (java.lang.Integer. (int a))))
  (defn
-  toLowerCase
-  ([] (.toLowerCase the-string))
-  ([^java.util.Locale a] (.toLowerCase the-string a)))
+  make-Integer-from-String
+  ([^java.lang.String a] (java.lang.Integer. a)))
+ (defn compare ([a b] (java.lang.Integer/compare (int a) (int b))))
  (defn
-  replaceAll
-  ([^java.lang.String a ^java.lang.String b]
-   (.replaceAll the-string a b)))
- (defn contains ([^java.lang.CharSequence a] (.contains the-string a)))
- (defn endsWith ([^java.lang.String a] (.endsWith the-string a)))
+  remainderUnsigned
+  ([a b] (java.lang.Integer/remainderUnsigned (int a) (int b))))
+ (defn shortValue ([] (.shortValue the-int)))
+ (defn min ([a b] (java.lang.Integer/min (int a) (int b))))
+ (defn toHexString ([a] (java.lang.Integer/toHexString (int a))))
  (defn
-  replaceFirst
-  ([^java.lang.String a ^java.lang.String b]
-   (.replaceFirst the-string a b)))
- (defn toString ([] (.toString the-string)))
- (defn subSequence ([a b] (.subSequence the-string (int a) (int b))))
+  divideUnsigned
+  ([a b] (java.lang.Integer/divideUnsigned (int a) (int b))))
+ (defn doubleValue ([] (.doubleValue the-int)))
+ (defn highestOneBit ([a] (java.lang.Integer/highestOneBit (int a))))
+ (defn longValue ([] (.longValue the-int)))
+ (defn sum ([a b] (java.lang.Integer/sum (int a) (int b))))
+ (defn reverse ([a] (java.lang.Integer/reverse (int a))))
+ (defn decode ([^java.lang.String a] (java.lang.Integer/decode a)))
+ (defn byteValue ([] (.byteValue the-int)))
+ (defn max ([a b] (java.lang.Integer/max (int a) (int b))))
  (defn
-  substring
-  ([a] (.substring the-string (int a)))
-  ([a b] (.substring the-string (int a) (int b))))
+  toString
+  ([] (.toString the-int))
+  ([a] (java.lang.Integer/toString (int a)))
+  ([a b] (java.lang.Integer/toString (int a) (int b))))
  (defn
-  equalsIgnoreCase
-  ([^java.lang.String a] (.equalsIgnoreCase the-string a)))
- (defn toCharArray ([] (.toCharArray the-string)))
- (defn charAt ([a] (.charAt the-string (int a))))
+  rotateRight
+  ([a b] (java.lang.Integer/rotateRight (int a) (int b))))
  (defn
-  split
-  ([^java.lang.String a] (.split the-string a))
-  ([^java.lang.String a b] (.split the-string a (int b))))
+  compareUnsigned
+  ([a b] (java.lang.Integer/compareUnsigned (int a) (int b))))
+ (defn floatValue ([] (.floatValue the-int)))
+ (defn toOctalString ([a] (java.lang.Integer/toOctalString (int a))))
+ (defn reverseBytes ([a] (java.lang.Integer/reverseBytes (int a))))
+ (defn bitCount ([a] (java.lang.Integer/bitCount (int a))))
+ (defn rotateLeft ([a b] (java.lang.Integer/rotateLeft (int a) (int b))))
+ (defn intValue ([] (.intValue the-int)))
  (defn
-  toUpperCase
-  ([] (.toUpperCase the-string))
-  ([^java.util.Locale a] (.toUpperCase the-string a)))
- (defn concat ([^java.lang.String a] (.concat the-string a)))
+  hashCode
+  ([] (.hashCode the-int))
+  ([a] (java.lang.Integer/hashCode (int a))))
+ (defn toBinaryString ([a] (java.lang.Integer/toBinaryString (int a))))
  (defn
-  offsetByCodePoints
-  ([a b] (.offsetByCodePoints the-string (int a) (int b))))
- (defn length ([] (.length the-string)))
+  numberOfLeadingZeros
+  ([a] (java.lang.Integer/numberOfLeadingZeros (int a))))
+ (defn toUnsignedLong ([a] (java.lang.Integer/toUnsignedLong (int a))))
+ (defn lowestOneBit ([a] (java.lang.Integer/lowestOneBit (int a))))
+ (defn equals ([^java.lang.Object a] (.equals the-int a)))
  (defn
-  regionMatches
-  ([a ^java.lang.String b c d]
-   (.regionMatches the-string (int a) b (int c) (int d)))
-  ([a b ^java.lang.String c d e]
-   (.regionMatches the-string (boolean a) (int b) c (int d) (int e))))
- (defn matches ([^java.lang.String a] (.matches the-string a)))
- (defn intern ([] (.intern the-string)))
+  numberOfTrailingZeros
+  ([a] (java.lang.Integer/numberOfTrailingZeros (int a))))
  (defn
-  startsWith
-  ([^java.lang.String a] (.startsWith the-string a))
-  ([^java.lang.String a b] (.startsWith the-string a (int b))))
- (defn hashCode ([] (.hashCode the-string)))
- (defn isEmpty ([] (.isEmpty the-string)))
+  parseUnsignedInt
+  ([^java.lang.String a] (java.lang.Integer/parseUnsignedInt a))
+  ([^java.lang.String a b]
+   (java.lang.Integer/parseUnsignedInt a (int b))))
+ (defn signum ([a] (java.lang.Integer/signum (int a))))
  (defn
-  codePointCount
-  ([a b] (.codePointCount the-string (int a) (int b))))
- (defn codePointBefore ([a] (.codePointBefore the-string (int a))))
- (defn equals ([^java.lang.Object a] (.equals the-string a)))
+  toUnsignedString
+  ([a] (java.lang.Integer/toUnsignedString (int a)))
+  ([a b] (java.lang.Integer/toUnsignedString (int a) (int b))))
  (defn
-  compareToIgnoreCase
-  ([^java.lang.String a] (.compareToIgnoreCase the-string a)))
- (defn codePointAt ([a] (.codePointAt the-string (int a))))
+  parseInt
+  ([^java.lang.String a] (java.lang.Integer/parseInt a))
+  ([^java.lang.String a b] (java.lang.Integer/parseInt a (int b))))
+ (def -MIN_VALUE java.lang.Integer/MIN_VALUE)
+ (def -MAX_VALUE java.lang.Integer/MAX_VALUE)
+ (def -TYPE java.lang.Integer/TYPE)
+ (def -SIZE java.lang.Integer/SIZE)
+ (def -BYTES java.lang.Integer/BYTES)
  "
 ```
 
-If you want the actual code generated, use *make-functions* instead of *get-code*
+If you want the actual code generated, use *get-code* instead of *get-code-str*
 
 ```
-(require '[clowg.core :refer [make-functions]])
+(require '[clowg.core :refer [get-code]])
 
-(make-functions Integer)
+(get-code Integer)
 =>
-((defn shortValue ([^java.lang.Integer this] (.shortValue this)))
+((defn make-Integer-from-int ([a] (java.lang.Integer. (int a))))
+ (defn make-Integer-from-String ([^java.lang.String a] (java.lang.Integer. a)))
+ (defn compare ([a b] (java.lang.Integer/compare (int a) (int b))))
+ (defn remainderUnsigned ([a b] (java.lang.Integer/remainderUnsigned (int a) (int b))))
+ (defn shortValue ([^java.lang.Integer this] (.shortValue this)))
+ (defn min ([a b] (java.lang.Integer/min (int a) (int b))))
+ (defn toHexString ([a] (java.lang.Integer/toHexString (int a))))
+ (defn divideUnsigned ([a b] (java.lang.Integer/divideUnsigned (int a) (int b))))
  (defn doubleValue ([^java.lang.Integer this] (.doubleValue this)))
+ (defn highestOneBit ([a] (java.lang.Integer/highestOneBit (int a))))
  (defn longValue ([^java.lang.Integer this] (.longValue this)))
+ (defn sum ([a b] (java.lang.Integer/sum (int a) (int b))))
+ (defn reverse ([a] (java.lang.Integer/reverse (int a))))
+ (defn decode ([^java.lang.String a] (java.lang.Integer/decode a)))
  (defn byteValue ([^java.lang.Integer this] (.byteValue this)))
- (defn toString ([^java.lang.Integer this] (.toString this)))
+ (defn max ([a b] (java.lang.Integer/max (int a) (int b))))
+ (defn
+  toString
+  ([^java.lang.Integer this] (.toString this))
+  ([a] (java.lang.Integer/toString (int a)))
+  ([a b] (java.lang.Integer/toString (int a) (int b))))
+ (defn rotateRight ([a b] (java.lang.Integer/rotateRight (int a) (int b))))
+ (defn compareUnsigned ([a b] (java.lang.Integer/compareUnsigned (int a) (int b))))
  (defn floatValue ([^java.lang.Integer this] (.floatValue this)))
+ (defn toOctalString ([a] (java.lang.Integer/toOctalString (int a))))
+ (defn reverseBytes ([a] (java.lang.Integer/reverseBytes (int a))))
+ (defn bitCount ([a] (java.lang.Integer/bitCount (int a))))
+ (defn rotateLeft ([a b] (java.lang.Integer/rotateLeft (int a) (int b))))
  (defn intValue ([^java.lang.Integer this] (.intValue this)))
- (defn hashCode ([^java.lang.Integer this] (.hashCode this)))
- (defn equals ([^java.lang.Integer this ^java.lang.Object a] (.equals this a))))
+ (defn hashCode ([^java.lang.Integer this] (.hashCode this)) ([a] (java.lang.Integer/hashCode (int a))))
+ (defn toBinaryString ([a] (java.lang.Integer/toBinaryString (int a))))
+ (defn numberOfLeadingZeros ([a] (java.lang.Integer/numberOfLeadingZeros (int a))))
+ (defn toUnsignedLong ([a] (java.lang.Integer/toUnsignedLong (int a))))
+ (defn lowestOneBit ([a] (java.lang.Integer/lowestOneBit (int a))))
+ (defn equals ([^java.lang.Integer this ^java.lang.Object a] (.equals this a)))
+ (defn numberOfTrailingZeros ([a] (java.lang.Integer/numberOfTrailingZeros (int a))))
+ (defn
+  parseUnsignedInt
+  ([^java.lang.String a] (java.lang.Integer/parseUnsignedInt a))
+  ([^java.lang.String a b] (java.lang.Integer/parseUnsignedInt a (int b))))
+ (defn signum ([a] (java.lang.Integer/signum (int a))))
+ (defn
+  toUnsignedString
+  ([a] (java.lang.Integer/toUnsignedString (int a)))
+  ([a b] (java.lang.Integer/toUnsignedString (int a) (int b))))
+ (defn
+  parseInt
+  ([^java.lang.String a] (java.lang.Integer/parseInt a))
+  ([^java.lang.String a b] (java.lang.Integer/parseInt a (int b))))
+ (def -MIN_VALUE java.lang.Integer/MIN_VALUE)
+ (def -MAX_VALUE java.lang.Integer/MAX_VALUE)
+ (def -TYPE java.lang.Integer/TYPE)
+ (def -SIZE java.lang.Integer/SIZE)
+ (def -BYTES java.lang.Integer/BYTES))
 
 ```
 
 ## TODO
 
-- Generate static methods
-- Generate field accessors
-- Add support for Java method overloads with same arity (they're skipped for now)
+- Handle Java method overloads with same arity (they're skipped for now)
 
 ## License
 
