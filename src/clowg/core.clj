@@ -52,13 +52,13 @@
      :parameter-types parameter-types
      :arity (count parameter-types)}))
 
-(defn get-field-info [^Field field]
-  {:name (.getName field)
-   :is-static? (is-static? field)
-   :is-final? (is-final? field)
+(defn get-field-info [x]
+  {:name (.getName x)
+   :is-static? (is-static? x)
+   :is-final? (is-final? x)
    })
 
-(defn needs-multi-method? [overloads]
+(defn has-overloads-with-same-arity? [overloads]
   (->> overloads
        (group-by :arity)
        (map (fn [[arity overloads]] (count overloads)))
@@ -97,9 +97,35 @@
     (map get-method-info)
     (group-by :name)
     (map (fn [[name overloads]]
-           {:name name
-            :needs-multi? (needs-multi-method? overloads)
+           {:name (.getSimpleName class)
+            :arity-clash? (has-overloads-with-same-arity? overloads)
             :overloads (sort-by :arity overloads)}))))
+
+(defn make-overload-suffix [parameter-types]
+  (if (zero? (count parameter-types))
+    ""
+    (str "-from-"
+         (->>
+           parameter-types
+           (map #(str (get primitives % %)))
+           (map #(last (str/split % #"\.")))
+           (str/join "-and-")
+           ))))
+
+(defn make-overload-name [class parameter-types]
+  (str
+    (.getSimpleName class)
+    (make-overload-suffix parameter-types)))
+
+(defn get-suffixed-constructors [class]
+  (->>
+    (get-constructors class)
+    (first)
+    (:overloads)
+    (map #(dissoc % :is-static?))
+    (map #(assoc % :name (make-overload-name class (:parameter-types %))))
+    (map (fn [m] {:name (:name m)
+                  :overloads (list m)}))))
 
 (defn get-methods [class]
   (->>
@@ -110,10 +136,10 @@
     (group-by :name)
     (map (fn [[name overloads]]
            {:name name
-            :needs-multi? (needs-multi-method? overloads)
+            :arity-clash? (has-overloads-with-same-arity? overloads)
             :overloads (sort-by :arity overloads)}))))
 
-(defn gen-params [parameter-types]
+(defn make-params [parameter-types]
   (let [alphabet "abcdefghijklmnopqrstuvwxyz"
         len (count alphabet)
         arity (count parameter-types)
@@ -125,7 +151,7 @@
     (map symbol letters)))
 
 (defn make-function-params-vector [parameter-types]
-  (let [params (gen-params parameter-types)
+  (let [params (make-params parameter-types)
         parts (map (fn [type param]
                      (cond
                        ; a
@@ -140,7 +166,7 @@
     (vec (apply concat parts))))
 
 (defn make-function-body-params [parameter-types]
-  (let [params (gen-params parameter-types)]
+  (let [params (make-params parameter-types)]
     (map (fn [type param]
            (cond
              ; (float a)
@@ -154,7 +180,6 @@
 
 (defn handle-constructor-overload [class overload]
   (let [parameter-types (:parameter-types overload)
-        _ (println parameter-types)
         params (make-function-params-vector parameter-types)
         body-params (make-function-body-params parameter-types)
         body (list
@@ -162,16 +187,19 @@
     (list params (concat body body-params))))
 
 (defn handle-constructor [class constructor]
-  (let [name (symbol (str "make-" (.getSimpleName class)))
+  (let [name (symbol (str "make-" (:name constructor)))
         body (map (partial handle-constructor-overload class)
                   (:overloads constructor))]
     (concat (list 'defn name) body)))
 
 (defn handle-constructors [class]
-  (->> (get-constructors class)
-       (filter #(not (:needs-multi? %))) ; no support for multi-methods yet...
-       (map (partial handle-constructor class))
-       ))
+  (let [constructors (->> (get-constructors class)
+                          (filter #(not (:arity-clash? %))))
+        constructors (if (zero? (count constructors))
+                       (get-suffixed-constructors class)
+                       constructors)]
+    (->> constructors
+         (map (partial handle-constructor class)))))
 
 (defn make-function-body [class inst overload]
   (let [parameter-types (:parameter-types overload)
@@ -212,16 +240,24 @@
   ([class] (handle-methods class false))
   ([class inst]
    (->> (get-methods class)
-        (filter #(not (:needs-multi? %))) ; no support for multi-methods yet...
+        (filter #(not (:arity-clash? %))) ; no support for multi-methods yet...
         (map (partial handle-method class inst))
         )))
 
 (defn get-code
-  ([class] (get-code class false))
+  ([class] (get-code class nil))
   ([class inst]
    (let [constructors (handle-constructors class)
          methods (handle-methods class inst)
-         fields (handle-fields class inst)
-         code (concat constructors methods fields)
-         code-str (with-out-str (doall (map pp/pprint code)))]
-     code-str)))
+         fields (handle-fields class inst)]
+     (concat constructors
+             methods
+             fields))))
+
+(defn get-code-str
+  ([class] (get-code-str class nil))
+  ([class inst]
+   (with-out-str
+     (doall
+       (map pp/pprint
+            (get-code class inst))))))
