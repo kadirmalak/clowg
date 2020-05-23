@@ -101,21 +101,45 @@
             :arity-clash? (has-overloads-with-same-arity? overloads)
             :overloads (sort-by :arity overloads)}))))
 
-(defn make-overload-suffix [parameter-types]
+(defn type-to-suffix [type]
+  (cond
+
+    (contains? primitives type)
+    (str (get primitives type))
+
+    (str/starts-with? type "[L")
+    (->
+      (re-find #"^\[L(.*);$" type)
+      (second)
+      (str/split #"\.")
+      (last)
+      (str "-array"))
+
+    :else (last (str/split type #"\."))
+    ))
+
+(defn make-overload-suffix [parameter-types beginning]
   (if (zero? (count parameter-types))
     ""
-    (str "-from-"
+    (str beginning
          (->>
            parameter-types
-           (map #(str (get primitives % %)))
-           (map #(last (str/split % #"\.")))
+           (map type-to-suffix)
            (str/join "-and-")
            ))))
 
-(defn make-overload-name [class parameter-types]
+(defn make-constructor-name [class parameter-types]
   (str
     (.getSimpleName class)
-    (make-overload-suffix parameter-types)))
+    (make-overload-suffix parameter-types "-with-")))
+
+(defn make-method-name [overload]
+  (str
+    (:name overload)
+    (make-overload-suffix (:parameter-types overload) "-")))
+
+(defn get-key [key map]
+  (get map key))
 
 (defn get-suffixed-constructors [class]
   (->>
@@ -123,7 +147,7 @@
     (first)
     (:overloads)
     (map #(dissoc % :is-static?))
-    (map #(assoc % :name (make-overload-name class (:parameter-types %))))
+    (map #(assoc % :name (make-constructor-name class (:parameter-types %))))
     (map (fn [m] {:name (:name m)
                   :overloads (list m)}))))
 
@@ -138,6 +162,25 @@
            {:name name
             :arity-clash? (has-overloads-with-same-arity? overloads)
             :overloads (sort-by :arity overloads)}))))
+
+(defn get-original-methods [class]
+  (->>
+    class
+    (get-methods)
+    (filter #(not (:arity-clash? %)))))
+
+(defn get-suffixed-methods [class]
+  (->>
+    (get-methods class)
+    (filter :arity-clash?)
+    (map :overloads)
+    (apply concat)
+    (map #(assoc % :new-name (make-method-name %)))
+    (map (fn [m] {:name (:name m)
+                  :new-name (:new-name m)
+                  :is-static? (:is-static? m)
+                  :overloads (list m)}))
+    ))
 
 (defn make-params [parameter-types]
   (let [alphabet "abcdefghijklmnopqrstuvwxyz"
@@ -231,7 +274,7 @@
     (make-function-body class inst overload)))
 
 (defn handle-method [class inst method]
-  (let [name (symbol (:name method))
+  (let [name (symbol (:new-name method (:name method)))
         body (map (partial handle-overload class inst)
                   (:overloads method))]
     (concat (list 'defn name) body)))
@@ -239,10 +282,12 @@
 (defn handle-methods
   ([class] (handle-methods class false))
   ([class inst]
-   (->> (get-methods class)
-        (filter #(not (:arity-clash? %))) ; no support for multi-methods yet...
-        (map (partial handle-method class inst))
-        )))
+   (let [original (get-original-methods class)
+         suffixed (get-suffixed-methods class)
+         methods (concat original suffixed)]
+     (->> methods
+          (map (partial handle-method class inst))
+          ))))
 
 (defn get-code
   ([class] (get-code class nil))

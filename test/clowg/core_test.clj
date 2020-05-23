@@ -1,12 +1,9 @@
 (ns clowg.core-test
   (:require [clojure.test :refer :all]))
 
-(require '[clowg.core :refer [get-code]])
+(require '[clowg.core :refer [get-code get-code-str]])
+(import java.util.concurrent.LinkedBlockingDeque)
 
-(require '[clowg.core :refer [make-functions]])
-
-(make-functions String)
-
-(get-code String)
+(get-code-str LinkedBlockingDeque)
 
 ; TODO: add tests
