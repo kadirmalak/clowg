@@ -46,11 +46,13 @@
        ))
 
 (defn get-method-info [x]
-  (let [parameter-types (get-parameter-types x)]
+  (let [parameter-types (get-parameter-types x)
+        arity (count parameter-types)
+        static (is-static? x)]
     {:name (.getName x)
-     :is-static? (is-static? x)
+     :is-static? static
      :parameter-types parameter-types
-     :arity (count parameter-types)}))
+     :arity (if static arity (inc arity))}))
 
 (defn get-field-info [x]
   {:name (.getName x)

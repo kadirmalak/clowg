@@ -1,4 +1,4 @@
-(defproject clowg "0.1.5"
+(defproject clowg "0.1.6"
   :description "A Clojure library for generating Clojure wrappers around Java"
   :url "https://github.com/kadirmalak/clowg"
   :license {:name "MIT License"
