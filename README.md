@@ -12,235 +12,95 @@ A Clojure library for generating Clojure wrappers around Java
 (require '[clowg.core :refer [get-code-str]])
 ```
 
-Wrap Integer class
+## Example 1: Wrapping java.util.concurrent.LinkedBlockingDeque
+
+- import Java class
 
 ```
-(get-code-str Integer)
+(import java.util.concurrent.LinkedBlockingDeque)
+```
+
+- generate code and save output to a file
+
+```
+(get-code-str LinkedBlockingDeque)
 =>
-"(defn make-Integer-from-int ([a] (java.lang.Integer. (int a))))
- (defn
-  make-Integer-from-String
-  ([^java.lang.String a] (java.lang.Integer. a)))
- (defn compare ([a b] (java.lang.Integer/compare (int a) (int b))))
- (defn
-  remainderUnsigned
-  ([a b] (java.lang.Integer/remainderUnsigned (int a) (int b))))
- (defn shortValue ([^java.lang.Integer this] (.shortValue this)))
- (defn min ([a b] (java.lang.Integer/min (int a) (int b))))
- (defn toHexString ([a] (java.lang.Integer/toHexString (int a))))
- (defn
-  divideUnsigned
-  ([a b] (java.lang.Integer/divideUnsigned (int a) (int b))))
- (defn doubleValue ([^java.lang.Integer this] (.doubleValue this)))
- (defn highestOneBit ([a] (java.lang.Integer/highestOneBit (int a))))
- (defn longValue ([^java.lang.Integer this] (.longValue this)))
- (defn sum ([a b] (java.lang.Integer/sum (int a) (int b))))
- (defn reverse ([a] (java.lang.Integer/reverse (int a))))
- (defn decode ([^java.lang.String a] (java.lang.Integer/decode a)))
- (defn byteValue ([^java.lang.Integer this] (.byteValue this)))
- (defn max ([a b] (java.lang.Integer/max (int a) (int b))))
- (defn
-  toString
-  ([^java.lang.Integer this] (.toString this))
-  ([a] (java.lang.Integer/toString (int a)))
-  ([a b] (java.lang.Integer/toString (int a) (int b))))
- (defn
-  rotateRight
-  ([a b] (java.lang.Integer/rotateRight (int a) (int b))))
- (defn
-  compareUnsigned
-  ([a b] (java.lang.Integer/compareUnsigned (int a) (int b))))
- (defn floatValue ([^java.lang.Integer this] (.floatValue this)))
- (defn toOctalString ([a] (java.lang.Integer/toOctalString (int a))))
- (defn reverseBytes ([a] (java.lang.Integer/reverseBytes (int a))))
- (defn bitCount ([a] (java.lang.Integer/bitCount (int a))))
- (defn rotateLeft ([a b] (java.lang.Integer/rotateLeft (int a) (int b))))
- (defn intValue ([^java.lang.Integer this] (.intValue this)))
- (defn
-  hashCode
-  ([^java.lang.Integer this] (.hashCode this))
-  ([a] (java.lang.Integer/hashCode (int a))))
- (defn toBinaryString ([a] (java.lang.Integer/toBinaryString (int a))))
- (defn
-  numberOfLeadingZeros
-  ([a] (java.lang.Integer/numberOfLeadingZeros (int a))))
- (defn toUnsignedLong ([a] (java.lang.Integer/toUnsignedLong (int a))))
- (defn lowestOneBit ([a] (java.lang.Integer/lowestOneBit (int a))))
- (defn
-  equals
-  ([^java.lang.Integer this ^java.lang.Object a] (.equals this a)))
- (defn
-  numberOfTrailingZeros
-  ([a] (java.lang.Integer/numberOfTrailingZeros (int a))))
- (defn
-  parseUnsignedInt
-  ([^java.lang.String a] (java.lang.Integer/parseUnsignedInt a))
-  ([^java.lang.String a b]
-   (java.lang.Integer/parseUnsignedInt a (int b))))
- (defn signum ([a] (java.lang.Integer/signum (int a))))
- (defn
-  toUnsignedString
-  ([a] (java.lang.Integer/toUnsignedString (int a)))
-  ([a b] (java.lang.Integer/toUnsignedString (int a) (int b))))
- (defn
-  parseInt
-  ([^java.lang.String a] (java.lang.Integer/parseInt a))
-  ([^java.lang.String a b] (java.lang.Integer/parseInt a (int b))))
- (def -MIN_VALUE java.lang.Integer/MIN_VALUE)
- (def -MAX_VALUE java.lang.Integer/MAX_VALUE)
- (def -TYPE java.lang.Integer/TYPE)
- (def -SIZE java.lang.Integer/SIZE)
- (def -BYTES java.lang.Integer/BYTES)
- "
+"(defn
+  make-LinkedBlockingDeque
+  ([] (java.util.concurrent.LinkedBlockingDeque.)))
+  ...
 ```
 
-Or if you want to refer to a specific instance all the time (omits *this*)
+- use generated code
 
 ```
-(get-code-str Integer 'the-int)
-=>
-"(defn make-Integer-from-int ([a] (java.lang.Integer. (int a))))
- (defn
-  make-Integer-from-String
-  ([^java.lang.String a] (java.lang.Integer. a)))
- (defn compare ([a b] (java.lang.Integer/compare (int a) (int b))))
- (defn
-  remainderUnsigned
-  ([a b] (java.lang.Integer/remainderUnsigned (int a) (int b))))
- (defn shortValue ([] (.shortValue the-int)))
- (defn min ([a b] (java.lang.Integer/min (int a) (int b))))
- (defn toHexString ([a] (java.lang.Integer/toHexString (int a))))
- (defn
-  divideUnsigned
-  ([a b] (java.lang.Integer/divideUnsigned (int a) (int b))))
- (defn doubleValue ([] (.doubleValue the-int)))
- (defn highestOneBit ([a] (java.lang.Integer/highestOneBit (int a))))
- (defn longValue ([] (.longValue the-int)))
- (defn sum ([a b] (java.lang.Integer/sum (int a) (int b))))
- (defn reverse ([a] (java.lang.Integer/reverse (int a))))
- (defn decode ([^java.lang.String a] (java.lang.Integer/decode a)))
- (defn byteValue ([] (.byteValue the-int)))
- (defn max ([a b] (java.lang.Integer/max (int a) (int b))))
- (defn
-  toString
-  ([] (.toString the-int))
-  ([a] (java.lang.Integer/toString (int a)))
-  ([a b] (java.lang.Integer/toString (int a) (int b))))
- (defn
-  rotateRight
-  ([a b] (java.lang.Integer/rotateRight (int a) (int b))))
- (defn
-  compareUnsigned
-  ([a b] (java.lang.Integer/compareUnsigned (int a) (int b))))
- (defn floatValue ([] (.floatValue the-int)))
- (defn toOctalString ([a] (java.lang.Integer/toOctalString (int a))))
- (defn reverseBytes ([a] (java.lang.Integer/reverseBytes (int a))))
- (defn bitCount ([a] (java.lang.Integer/bitCount (int a))))
- (defn rotateLeft ([a b] (java.lang.Integer/rotateLeft (int a) (int b))))
- (defn intValue ([] (.intValue the-int)))
- (defn
-  hashCode
-  ([] (.hashCode the-int))
-  ([a] (java.lang.Integer/hashCode (int a))))
- (defn toBinaryString ([a] (java.lang.Integer/toBinaryString (int a))))
- (defn
-  numberOfLeadingZeros
-  ([a] (java.lang.Integer/numberOfLeadingZeros (int a))))
- (defn toUnsignedLong ([a] (java.lang.Integer/toUnsignedLong (int a))))
- (defn lowestOneBit ([a] (java.lang.Integer/lowestOneBit (int a))))
- (defn equals ([^java.lang.Object a] (.equals the-int a)))
- (defn
-  numberOfTrailingZeros
-  ([a] (java.lang.Integer/numberOfTrailingZeros (int a))))
- (defn
-  parseUnsignedInt
-  ([^java.lang.String a] (java.lang.Integer/parseUnsignedInt a))
-  ([^java.lang.String a b]
-   (java.lang.Integer/parseUnsignedInt a (int b))))
- (defn signum ([a] (java.lang.Integer/signum (int a))))
- (defn
-  toUnsignedString
-  ([a] (java.lang.Integer/toUnsignedString (int a)))
-  ([a b] (java.lang.Integer/toUnsignedString (int a) (int b))))
- (defn
-  parseInt
-  ([^java.lang.String a] (java.lang.Integer/parseInt a))
-  ([^java.lang.String a b] (java.lang.Integer/parseInt a (int b))))
- (def -MIN_VALUE java.lang.Integer/MIN_VALUE)
- (def -MAX_VALUE java.lang.Integer/MAX_VALUE)
- (def -TYPE java.lang.Integer/TYPE)
- (def -SIZE java.lang.Integer/SIZE)
- (def -BYTES java.lang.Integer/BYTES)
- "
+; assuming that code is copied into src/com/example/linked_blocking_deque.clj
+
+(require '[com.example.linked-blocking-deque :as dq])
+
+(def q (dq/make-LinkedBlockingDeque-with-int 5)) ; **int** parameter is capacity
+
+(dq/addFirst q "f1")
+(dq/addFirst q "f2")
+(dq/addFirst q "f3")
+(dq/addLast q "l1")
+(dq/addLast q "l2")
+
+(dq/poll q)
+=> "f3"
+(dq/poll q)
+=> "f2"
+(dq/poll q)
+=> "f1"
+(dq/poll q)
+=> "l1"
+(dq/poll q)
+=> "l2"
+(dq/poll q)
+=> nil
 ```
 
-If you want the actual code generated, use *get-code* instead of *get-code-str*
+## Example 2: Wrapping java.util.Random
+
+- import class and generate the code (copy output into a file)
 
 ```
-(require '[clowg.core :refer [get-code]])
+(import java.util.Random)
+(get-code-str Random)
+```
 
-(get-code Integer)
-=>
-((defn make-Integer-from-int ([a] (java.lang.Integer. (int a))))
- (defn make-Integer-from-String ([^java.lang.String a] (java.lang.Integer. a)))
- (defn compare ([a b] (java.lang.Integer/compare (int a) (int b))))
- (defn remainderUnsigned ([a b] (java.lang.Integer/remainderUnsigned (int a) (int b))))
- (defn shortValue ([^java.lang.Integer this] (.shortValue this)))
- (defn min ([a b] (java.lang.Integer/min (int a) (int b))))
- (defn toHexString ([a] (java.lang.Integer/toHexString (int a))))
- (defn divideUnsigned ([a b] (java.lang.Integer/divideUnsigned (int a) (int b))))
- (defn doubleValue ([^java.lang.Integer this] (.doubleValue this)))
- (defn highestOneBit ([a] (java.lang.Integer/highestOneBit (int a))))
- (defn longValue ([^java.lang.Integer this] (.longValue this)))
- (defn sum ([a b] (java.lang.Integer/sum (int a) (int b))))
- (defn reverse ([a] (java.lang.Integer/reverse (int a))))
- (defn decode ([^java.lang.String a] (java.lang.Integer/decode a)))
- (defn byteValue ([^java.lang.Integer this] (.byteValue this)))
- (defn max ([a b] (java.lang.Integer/max (int a) (int b))))
- (defn
-  toString
-  ([^java.lang.Integer this] (.toString this))
-  ([a] (java.lang.Integer/toString (int a)))
-  ([a b] (java.lang.Integer/toString (int a) (int b))))
- (defn rotateRight ([a b] (java.lang.Integer/rotateRight (int a) (int b))))
- (defn compareUnsigned ([a b] (java.lang.Integer/compareUnsigned (int a) (int b))))
- (defn floatValue ([^java.lang.Integer this] (.floatValue this)))
- (defn toOctalString ([a] (java.lang.Integer/toOctalString (int a))))
- (defn reverseBytes ([a] (java.lang.Integer/reverseBytes (int a))))
- (defn bitCount ([a] (java.lang.Integer/bitCount (int a))))
- (defn rotateLeft ([a b] (java.lang.Integer/rotateLeft (int a) (int b))))
- (defn intValue ([^java.lang.Integer this] (.intValue this)))
- (defn hashCode ([^java.lang.Integer this] (.hashCode this)) ([a] (java.lang.Integer/hashCode (int a))))
- (defn toBinaryString ([a] (java.lang.Integer/toBinaryString (int a))))
- (defn numberOfLeadingZeros ([a] (java.lang.Integer/numberOfLeadingZeros (int a))))
- (defn toUnsignedLong ([a] (java.lang.Integer/toUnsignedLong (int a))))
- (defn lowestOneBit ([a] (java.lang.Integer/lowestOneBit (int a))))
- (defn equals ([^java.lang.Integer this ^java.lang.Object a] (.equals this a)))
- (defn numberOfTrailingZeros ([a] (java.lang.Integer/numberOfTrailingZeros (int a))))
- (defn
-  parseUnsignedInt
-  ([^java.lang.String a] (java.lang.Integer/parseUnsignedInt a))
-  ([^java.lang.String a b] (java.lang.Integer/parseUnsignedInt a (int b))))
- (defn signum ([a] (java.lang.Integer/signum (int a))))
- (defn
-  toUnsignedString
-  ([a] (java.lang.Integer/toUnsignedString (int a)))
-  ([a b] (java.lang.Integer/toUnsignedString (int a) (int b))))
- (defn
-  parseInt
-  ([^java.lang.String a] (java.lang.Integer/parseInt a))
-  ([^java.lang.String a b] (java.lang.Integer/parseInt a (int b))))
- (def -MIN_VALUE java.lang.Integer/MIN_VALUE)
- (def -MAX_VALUE java.lang.Integer/MAX_VALUE)
- (def -TYPE java.lang.Integer/TYPE)
- (def -SIZE java.lang.Integer/SIZE)
- (def -BYTES java.lang.Integer/BYTES))
+- use generated code
+
+```
+; assuming that code is copied into src/com/example/random.clj
+
+(require '[com.example.random :as rnd])
+
+(def r (rnd/make-Random 42))
+(repeatedly 10 #(rnd/nextInt r 10))
+=> (0 3 8 4 0 5 5 8 9 3)
 
 ```
 
-## TODO
+## Conversion Details
 
-- Handle Java method overloads with same arity (they're skipped for now)
+- If a Java method has at least two overloads with same number of parameters, an arity problem occurs. In order to resolve this issue, new functions are generated with different names based on their parameter types.
+
+```
+(defn make-String ...
+(defn make-String-with-StringBuilder ...
+(defn make-String-with-StringBuffer ...
+(defn make-String-with-byte-array ...
+(defn make-String-with-byte-array-and-Charset ... 
+```
+
+- Constructors start with make-SimpleClassName
+
+- Instance methods and static methods start with their original names.
+
+- Fields are **function**s starting with "-"
+
+- Static final fields are **def**s starting with "-"
 
 ## License
 
