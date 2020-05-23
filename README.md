@@ -12,7 +12,7 @@ A Clojure library for generating Clojure wrappers around Java
 (require '[clowg.core :refer [get-code-str]])
 ```
 
-## Example: Wrapping java.util.concurrent.LinkedBlockingDeque
+## Example 1: Wrapping java.util.concurrent.LinkedBlockingDeque
 
 - import Java class
 
@@ -34,7 +34,7 @@ A Clojure library for generating Clojure wrappers around Java
 - use generated code
 
 ```
-; assuming that code is written to src/com/example/linked_blocking_deque.clj
+; assuming that code is copied into src/com/example/linked_blocking_deque.clj
 
 (require '[com.example.linked-blocking-deque :as dq])
 
@@ -59,6 +59,48 @@ A Clojure library for generating Clojure wrappers around Java
 (dq/poll q)
 => nil
 ```
+
+## Example 2: Wrapping java.util.Random
+
+- import class and generate the code (copy output into a file)
+
+```
+(import java.util.Random)
+(get-code-str Random)
+```
+
+- use generated code
+
+```
+; assuming that code is copied into src/com/example/random.clj
+
+(require '[com.example.random :as rnd])
+
+(def r (rnd/make-Random 42))
+(repeatedly 10 #(rnd/nextInt r 10))
+=> (0 3 8 4 0 5 5 8 9 3)
+
+```
+
+## Conversion Details
+
+- If a Java method has at least two overloads with same number of parameters, an arity problem occurs. In order to resolve this issue, new functions are generated with different names based on their parameter types.
+
+```
+(defn make-String ...
+(defn make-String-with-StringBuilder ...
+(defn make-String-with-StringBuffer ...
+(defn make-String-with-byte-array ...
+(defn make-String-with-byte-array-and-Charset ... 
+```
+
+- Constructors start with make-SimpleClassName
+
+- Instance methods and static methods start with their original names.
+
+- Fields are **function**s starting with "-"
+
+- Static final fields are **def**s starting with "-"
 
 ## License
 
