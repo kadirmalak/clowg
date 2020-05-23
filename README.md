@@ -102,6 +102,10 @@ A Clojure library for generating Clojure wrappers around Java
 
 - Static final fields are **def**s starting with "-"
 
+## TODO
+
+- Handle nested array parameters
+
 ## License
 
 MIT License
