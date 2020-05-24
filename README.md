@@ -8,34 +8,20 @@ A Clojure library for generating Clojure wrappers around Java
 
 ## Usage
 
-```
-(require '[clowg.core :refer [get-code-str]])
-```
+### Example 1: Wrapping java.util.concurrent.LinkedBlockingDeque (cli usage)
 
-## Example 1: Wrapping java.util.concurrent.LinkedBlockingDeque
+- cd to the src directory
 
-- import Java class
+- run cmd to generate source file
 
 ```
-(import java.util.concurrent.LinkedBlockingDeque)
+> clojure -Sdeps "{:deps {clowg {:mvn/version \"0.1.7\"}}}" -m clowg.core java.util.concurrent.LinkedBlockingDeque com.example.linked-blocking-deque
+./com/example/linked_blocking_deque.clj written...
 ```
 
-- generate code and save output to a file
+- use generated file
 
 ```
-(get-code-str LinkedBlockingDeque)
-=>
-"(defn
-  make-LinkedBlockingDeque
-  ([] (java.util.concurrent.LinkedBlockingDeque.)))
-  ...
-```
-
-- use generated code
-
-```
-; assuming that code is copied into src/com/example/linked_blocking_deque.clj
-
 (require '[com.example.linked-blocking-deque :as dq])
 
 (def q (dq/make-LinkedBlockingDeque-with-int 5)) ; **int** parameter is capacity
@@ -60,13 +46,13 @@ A Clojure library for generating Clojure wrappers around Java
 => nil
 ```
 
-## Example 2: Wrapping java.util.Random
+### Example 2: Wrapping java.util.Random (lib usage)
 
-- import class and generate the code (copy output into a file)
+- generate the code string and manually copy into a file
 
 ```
-(import java.util.Random)
-(get-code-str Random)
+(require '[clowg.core :refer [get-code-str]])
+(get-code-str java.util.Random)
 ```
 
 - use generated code
