@@ -12,10 +12,10 @@ A Clojure library for generating Clojure wrappers around Java
 
 - cd to the src directory
 
-- run cmd to generate source file
+- run cmd to generate source file (change X.X.X part with the latest version number)
 
 ```
-> clojure -Sdeps "{:deps {clowg {:mvn/version \"0.1.7\"}}}" -m clowg.core java.util.concurrent.LinkedBlockingDeque com.example.linked-blocking-deque
+> clojure -Sdeps "{:deps {clowg {:mvn/version \"X.X.X\"}}}" -m clowg.core java.util.concurrent.LinkedBlockingDeque com.example.linked-blocking-deque
 ./com/example/linked_blocking_deque.clj written...
 ```
 
@@ -73,7 +73,7 @@ A Clojure library for generating Clojure wrappers around Java
 - you may add the external dependency to the cli command as in the following example:
 
 ```
-clojure -Sdeps "{:deps {clowg {:mvn/version \"0.1.7\"} org.processing/core {:mvn/version \"3.3.7\"}}}" -m clowg.core processing.core.PApplet com.example.p-applet
+clojure -Sdeps "{:deps {clowg {:mvn/version \"X.X.X\"} org.processing/core {:mvn/version \"3.3.7\"}}}" -m clowg.core processing.core.PApplet com.example.p-applet
 ./com/example/p_applet.clj written...
 ```
 
@@ -101,7 +101,7 @@ clojure -Sdeps "{:deps {clowg {:mvn/version \"0.1.7\"} org.processing/core {:mvn
 
 ## TODO
 
-- Handle nested array parameters
+...
 
 ## License
 
