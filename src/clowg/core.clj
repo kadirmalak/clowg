@@ -104,20 +104,19 @@
             :arity-clash? (has-overloads-with-same-arity? overloads)
             :overloads (sort-by :arity overloads)}))))
 
+(defn array-type-to-suffix [type]
+  (let [matches (re-find #"^(\[+)L(.*);$" type)
+        [_ level long-name] matches
+        short-name (last (str/split long-name #"\."))
+        arr (condp = (count level)
+              1 "array"
+              (str "array" (count level) "D"))]
+    (str short-name "-" arr)))
+
 (defn type-to-suffix [type]
   (cond
-
-    (contains? primitives type)
-    (str (get primitives type))
-
-    (str/starts-with? type "[L")
-    (->
-      (re-find #"^\[L(.*);$" type)
-      (second)
-      (str/split #"\.")
-      (last)
-      (str "-array"))
-
+    (contains? primitives type) (str (get primitives type))
+    (str/starts-with? type "[") (array-type-to-suffix type)
     :else (last (str/split type #"\."))
     ))
 
