@@ -105,13 +105,19 @@
             :overloads (sort-by :arity overloads)}))))
 
 (defn array-type-to-suffix [type]
-  (let [matches (re-find #"^(\[+)L(.*);$" type)
-        [_ level long-name] matches
-        short-name (last (str/split long-name #"\."))
-        arr (condp = (count level)
-              1 "array"
-              (str "array" (count level) "D"))]
-    (str short-name "-" arr)))
+  (let [matches (re-find #"^(\[+)([A-Z])([^;]*)(;*)$" type)
+        [_ level letter long-name _] matches
+        n (count level)]
+    (condp = letter
+      "L" (let [short-name (last (str/split long-name #"\."))
+                arr (condp = n
+                      1 "array"
+                      (str "array" (count level) "D"))]
+            (str short-name "-" arr))
+      (let [primitive-arr (str (get primitives (str "[" letter)))]
+        (condp = n
+          1 primitive-arr
+          (str primitive-arr (count level) "D"))))))
 
 (defn type-to-suffix [type]
   (cond
