@@ -8,34 +8,20 @@ A Clojure library for generating Clojure wrappers around Java
 
 ## Usage
 
-```
-(require '[clowg.core :refer [get-code-str]])
-```
+### Example 1: Wrapping java.util.concurrent.LinkedBlockingDeque (CLI usage)
 
-## Example 1: Wrapping java.util.concurrent.LinkedBlockingDeque
+- cd to the src directory
 
-- import Java class
+- run cmd to generate source file
 
 ```
-(import java.util.concurrent.LinkedBlockingDeque)
+> clojure -Sdeps "{:deps {clowg {:mvn/version \"0.1.7\"}}}" -m clowg.core java.util.concurrent.LinkedBlockingDeque com.example.linked-blocking-deque
+./com/example/linked_blocking_deque.clj written...
 ```
 
-- generate code and save output to a file
+- use generated file
 
 ```
-(get-code-str LinkedBlockingDeque)
-=>
-"(defn
-  make-LinkedBlockingDeque
-  ([] (java.util.concurrent.LinkedBlockingDeque.)))
-  ...
-```
-
-- use generated code
-
-```
-; assuming that code is copied into src/com/example/linked_blocking_deque.clj
-
 (require '[com.example.linked-blocking-deque :as dq])
 
 (def q (dq/make-LinkedBlockingDeque-with-int 5)) ; **int** parameter is capacity
@@ -60,13 +46,13 @@ A Clojure library for generating Clojure wrappers around Java
 => nil
 ```
 
-## Example 2: Wrapping java.util.Random
+### Example 2: Wrapping java.util.Random (LIB usage)
 
-- import class and generate the code (copy output into a file)
+- generate the code string and manually copy into a file
 
 ```
-(import java.util.Random)
-(get-code-str Random)
+(require '[clowg.core :refer [get-code-str]])
+(get-code-str java.util.Random)
 ```
 
 - use generated code
@@ -81,6 +67,17 @@ A Clojure library for generating Clojure wrappers around Java
 => (0 3 8 4 0 5 5 8 9 3)
 
 ```
+
+### Example 3: Wrapping 3rd party classes
+
+- you may add the external dependency to the cli command as in the following example:
+
+```
+clojure -Sdeps "{:deps {clowg {:mvn/version \"0.1.7\"} org.processing/core {:mvn/version \"3.3.7\"}}}" -m clowg.core processing.core.PApplet com.example.p-applet
+./com/example/p_applet.clj written...
+```
+
+- or you can always add clowg as a dependency to your project and prefer manual usage as in Example 2
 
 ## Conversion Details
 
