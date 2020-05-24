@@ -1,7 +1,8 @@
 (ns ^{:author "Kadir Malak"}
   clowg.core
   (:require [clojure.string :as str]
-            [clojure.pprint :as pp])
+            [clojure.pprint :as pp]
+            [clojure.java.io :as io])
   (:import (java.lang.reflect Modifier)))
 
 (def primitives {"float" 'float
@@ -308,3 +309,22 @@
      (doall
        (map pp/pprint
             (get-code class inst))))))
+
+(defn -main [& args]
+  (if (< (count args) 2)
+    (println "usage: ... <fully-qualified-class-name> <target-ns>")
+    (let [clazz (first args)
+          ns (second args)
+          class (Class/forName clazz)
+          code (str "(ns " ns ")\n\n" (get-code-str class))
+          dest (-> ns
+                   (str/replace "." "/")
+                   (str/replace "-" "_")
+                   (str ".clj"))]
+      (io/make-parents dest)
+      (spit dest code)
+      (println (str "./" dest) "written..."))))
+
+(comment
+  (-main "java.util.concurrent.LinkedBlockingDeque"
+         "com.example.linked-blocking-queue"))
