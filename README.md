@@ -8,7 +8,7 @@ A Clojure library for generating Clojure wrappers around Java
 
 ## Usage
 
-### Example 1: Wrapping java.util.concurrent.LinkedBlockingDeque (cli usage)
+### Example 1: Wrapping java.util.concurrent.LinkedBlockingDeque (CLI usage)
 
 - cd to the src directory
 
@@ -46,7 +46,7 @@ A Clojure library for generating Clojure wrappers around Java
 => nil
 ```
 
-### Example 2: Wrapping java.util.Random (lib usage)
+### Example 2: Wrapping java.util.Random (LIB usage)
 
 - generate the code string and manually copy into a file
 
@@ -67,6 +67,17 @@ A Clojure library for generating Clojure wrappers around Java
 => (0 3 8 4 0 5 5 8 9 3)
 
 ```
+
+### Example 3: Wrapping 3rd party classes
+
+- you may add the external dependency to the cli command as in the following example:
+
+```
+clojure -Sdeps "{:deps {clowg {:mvn/version \"0.1.7\"} org.processing/core {:mvn/version \"3.3.7\"}}}" -m clowg.core processing.core.PApplet com.example.p-applet
+./com/example/p_applet.clj written...
+```
+
+- or you can always add clowg as a dependency to your project and prefer manual usage as in Example 2
 
 ## Conversion Details
 
